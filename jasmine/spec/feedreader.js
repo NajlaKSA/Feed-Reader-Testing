@@ -35,6 +35,7 @@ $(function() {
             var flag = true;
             //iterate through allFeed array an check the url
             for (var i = 0 ; i< allFeeds.length ; i++){
+                expect(allFeeds[i].url).toBeDefined();
                 expect(allFeeds[i].url.length).not.toBe(0);
             }
         });
@@ -97,13 +98,7 @@ $(function() {
             });
         });
         it('feed container has at least one element', function(){
-/*             var hasElelents = false;
-            loadFeed(0 , function(){
-                var feeds = document.getElementsByClassName('feed')[0];
-                expect(feeds.length).not.toBe(0);
-            }) */
-            // above solution worked but I don't think it's solid. :(
-            expect(document.getElementsByClassName('entry').length).toBeGreaterThan(0);
+            expect(document.querySelectorAll('.feed .entry-link .entry').length).toBeGreaterThan(0);
         });
     });
 
@@ -121,7 +116,7 @@ $(function() {
                 firstCopy = document.getElementsByClassName('feed')[0].innerHTML;
                 loadFeed(1 , function(){
                     secondCopy = document.getElementsByClassName('feed')[0].innerHTML;
-                    console.log(firstCopy+"\n"+secondCopy);
+                    //console.log(firstCopy+"\n"+secondCopy);
                     expect(firstCopy).not.toEqual(secondCopy);
                     done();
                 });
