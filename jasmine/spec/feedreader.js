@@ -31,30 +31,59 @@ $(function() {
          * in the allFeeds object and ensures it has a URL defined
          * and that the URL is not empty.
          */
-
+        it("contains a url", function(){
+            var flag = true;
+            //iterate through allFeed array an check the url
+            for (var i = 0 ; i< allFeeds.length ; i++){
+                expect(allFeeds[i].url.length).not.toBe(0);
+            }
+        });
 
         /* TODO: Write a test that loops through each feed
          * in the allFeeds object and ensures it has a name defined
          * and that the name is not empty.
          */
+        it("has a name" ,function(){
+            // iterate through the array and check name attrivute.
+            for (var i = 0 ; i< allFeeds.length ; i++){
+                expect(allFeeds[i].name).toBeDefined();
+                expect(allFeeds[i].name.length).not.toBe(0);
+            }
+        });
     });
 
 
     /* TODO: Write a new test suite named "The menu" */
+    describe('The Menu' , function(){
 
         /* TODO: Write a test that ensures the menu element is
          * hidden by default. You'll have to analyze the HTML and
          * the CSS to determine how we're performing the
          * hiding/showing of the menu element.
          */
+        it('is hidden by default' , function(){
+            //console.log(document.getElementsByTagName('body')[0].classList.contains("menu-hidden"));
+            expect(document.getElementsByTagName('body')[0].classList.contains("menu-hidden")).toBe(true);
+        });
 
          /* TODO: Write a test that ensures the menu changes
           * visibility when the menu icon is clicked. This test
           * should have two expectations: does the menu display when
           * clicked and does it hide when clicked again.
           */
+          it('menu toggles' , function(){
+              var menuIcon = $('.menu-icon-link');
+            // toggle then toggle back and check the state after each action taken.
+              menuIcon.click();
+              expect(document.getElementsByTagName('body')[0].classList.contains("menu-hidden")).toBe(false);
+              
+              menuIcon.click();
+              expect(document.getElementsByTagName('body')[0].classList.contains("menu-hidden")).toBe(true);
 
+          });
+    });
     /* TODO: Write a new test suite named "Initial Entries" */
+    describe(' Initial Entry', function(){
 
         /* TODO: Write a test that ensures when the loadFeed
          * function is called and completes its work, there is at least
@@ -62,11 +91,41 @@ $(function() {
          * Remember, loadFeed() is asynchronous so this test will require
          * the use of Jasmine's beforeEach and asynchronous done() function.
          */
+        beforeEach(function(done){
+            loadFeed(0 , function(){
+                done();
+            });
+        });
+        it('feed container has at least one element', function(){
+/*             var hasElelents = false;
+            loadFeed(0 , function(){
+                var feeds = document.getElementsByClassName('feed')[0];
+                expect(feeds.length).not.toBe(0);
+            }) */
+            // above solution worked but I don't think it's solid. :(
+            expect(document.getElementsByClassName('entry').length).toBeGreaterThan(0);
+        });
+    });
 
     /* TODO: Write a new test suite named "New Feed Selection" */
-
+    describe('New Feed Selection' , function (){
         /* TODO: Write a test that ensures when a new feed is loaded
          * by the loadFeed function that the content actually changes.
          * Remember, loadFeed() is asynchronous.
          */
+        // take a copy of the 1st and 2nd load and compare their values.
+        var firstCopy,
+        secondCopy;
+        it('check content changes' , function(done){
+            loadFeed(0 , function(){
+                firstCopy = document.getElementsByClassName('feed')[0].innerHTML;
+                loadFeed(1 , function(){
+                    secondCopy = document.getElementsByClassName('feed')[0].innerHTML;
+                    console.log(firstCopy+"\n"+secondCopy);
+                    expect(firstCopy).not.toEqual(secondCopy);
+                    done();
+                });
+            });
+        });
+    });
 }());
